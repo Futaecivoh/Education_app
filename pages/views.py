@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Course
 
 def index(request):
     context = {
@@ -9,7 +10,10 @@ def index(request):
     return render(request, 'pages/index.html', context)
 
 def materials(request):
+    courses = Course.objects.all()
+    
     context = {
-        'title': 'Наши материалы',
+        'title': 'Наши курсы и материалы',
+        'courses': courses,
     }
     return render(request, 'pages/materials.html', context)
