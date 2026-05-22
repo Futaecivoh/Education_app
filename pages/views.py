@@ -19,6 +19,7 @@ def materials(request):
     }
     return render(request, 'pages/materials.html', context)
 pass
+
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
     
