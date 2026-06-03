@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Course
+from .forms import FeedbackForm
 
 def index(request):
     context = {
@@ -28,3 +29,23 @@ def course_detail(request, pk):
         'course': course,
     }
     return render(request, 'pages/course_detail.html', context)
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        
+        if form.is_valid():
+            print("=== НОВОЕ СООБЩЕНИЕ ===")
+            print(form.cleaned_data)
+            print("=======================")
+            
+            return redirect('home')
+            
+    else:
+        form = FeedbackForm()
+
+    context = {
+        'title': 'Обратная связь',
+        'form': form
+    }
+    return render(request, 'pages/contact.html', context)
