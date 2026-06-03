@@ -11,6 +11,9 @@
     </div>
 
     <div class="container mb-5">
+        <div class="d-flex justify-content-end mb-4">
+        <a href="{% url 'course_create' %}" class="btn btn-success fw-bold">+ Добавить новый курс</a>
+    </div>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             
             {% for course in courses %}

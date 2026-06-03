@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Course
-from .forms import FeedbackForm
+from .forms import FeedbackForm, CourseForm
 
 def index(request):
     context = {
@@ -49,3 +49,27 @@ def contact_view(request):
         'form': form
     }
     return render(request, 'pages/contact.html', context)
+
+def course_create(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            course = form.save()
+            return redirect('course_detail', pk=course.pk)
+    else:
+        form = CourseForm()
+        
+    context = {'form': form, 'title': 'Добавление нового курса'}
+    return render(request, 'pages/course_form.html', context)
+
+def course_update(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    form = CourseForm(request.POST, instance=course)
+    if form.is_valid():
+        form.save()
+        return redirect('course_detail', pk=course.pk)
+    else:
+        form = CourseForm(instance=course)
+    
+    context = {'form':form, 'title': 'Редактирование курса'}
+    return render(request,'pages/course_form.html', context)

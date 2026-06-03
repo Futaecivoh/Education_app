@@ -18,7 +18,11 @@
                     
                     <div class="d-flex justify-content-between align-items-center">
                         <h3 class="fw-bold text-success mb-0">Цена: {{ course.price }} руб.</h3>
-                        <a href="{% url 'materials' %}" class="btn btn-outline-secondary btn-lg">Назад к курсам</a>
+                        
+                        <div>
+                            <a href="{% url 'course_update' course.pk %}" class="btn btn-warning btn-lg me-2">Редактировать</a>
+                            <a href="{% url 'materials' %}" class="btn btn-outline-secondary btn-lg">Назад</a>
+                        </div>
                     </div>
                 </div>
             </div>
