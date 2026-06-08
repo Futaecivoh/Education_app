@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .models import Course, Tag
 from django.contrib import messages
+import logging
 
 def courses_by_tag(request, tag_id):
     tag = get_object_or_404(Tag, id=tag_id)
@@ -48,14 +49,15 @@ def course_detail(request, pk):
     }
     return render(request, 'pages/course_detail.html', context)
 
+
+logger = logging.getLogger(__name__)
+
 def contact_view(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
         
         if form.is_valid():
-            print("=== НОВОЕ СООБЩЕНИЕ ===")
-            print(form.cleaned_data)
-            print("=======================")
+            logger.info(f"=== НОВОЕ СООБЩЕНИЕ === {form.cleaned_data}")
             
             return redirect('home')
             
