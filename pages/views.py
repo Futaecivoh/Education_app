@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Course
-from .forms import FeedbackForm, CourseForm,CustomRegisterForm
+from .forms import FeedbackForm, CourseForm,CustomRegisterForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from .models import Course, Tag
+from django.contrib import messages
 
 def courses_by_tag(request, tag_id):
     tag = get_object_or_404(Tag, id=tag_id)
@@ -38,10 +39,12 @@ pass
 
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
+    comment_form = CommentForm()
     
-    context ={
+    context = {
         'title': course.title,
         'course': course,
+        'comment_form': comment_form
     }
     return render(request, 'pages/course_detail.html', context)
 
@@ -96,3 +99,20 @@ class RegisterView(CreateView):
     template_name = 'registration/register.html'
     form_class = CustomRegisterForm
     success_url = reverse_lazy('login')
+
+@login_required
+def add_comment(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.course = course
+            comment.author = request.user
+            comment.save()
+            messages.success(request, 'Ваш комментарий успешно добавлен!')
+        else:
+            messages.error(request, 'Произошла ошибка при добавлении комментария.')
+            
+    return redirect('course_detail', pk=pk)

@@ -42,7 +42,7 @@
                                 <span class="fs-5 fw-bold text-success">{{ course.price }} руб.</span>
                                 <small class="text-muted">{{ course.created_at|date:"d.m.Y" }}</small>
                             </div>
-                            <a href="{{ course.get_absolute_url }}" class="btn btn-primary w-100">Подробнее</a>
+                            <a href="{% url 'course_detail' course.pk %}" class="btn btn-primary w-100">Подробнее</a>
                         </div>
 
                     </div>

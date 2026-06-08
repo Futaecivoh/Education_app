@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course
+from .models import Course, Tag, Comment
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -43,3 +43,18 @@ class CustomLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+            
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'form-control', 
+                'rows': 3, 
+                'placeholder': 'Напишите свой комментарий...'
+            }),
+        }
+        labels = {
+            'text': ''
+        }

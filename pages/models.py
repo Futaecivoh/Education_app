@@ -27,3 +27,17 @@ class Course(models.Model):
         
     def get_absolute_url(self):
         return reverse('course_detail', kwargs={'pk': self.pk})
+    
+class Comment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='comments', verbose_name='Курс')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    text = models.TextField(verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата написания')
+
+    def __str__(self):
+        return f'{self.author.username} к {self.course.title}'
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['created_at']
