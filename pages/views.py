@@ -1,6 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Course
-from .forms import FeedbackForm, CourseForm
+from .forms import FeedbackForm, CourseForm,CustomRegisterForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
 
 def index(request):
     context = {
@@ -50,18 +55,21 @@ def contact_view(request):
     }
     return render(request, 'pages/contact.html', context)
 
+@login_required
 def course_create(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
-            course = form.save()
+            course = form.save(commit=False)
+            course.author = request.user
+            course.save()
             return redirect('course_detail', pk=course.pk)
     else:
         form = CourseForm()
-        
     context = {'form': form, 'title': 'Добавление нового курса'}
     return render(request, 'pages/course_form.html', context)
 
+@login_required
 def course_update(request, pk):
     course = get_object_or_404(Course, pk=pk)
     form = CourseForm(request.POST, instance=course)
@@ -73,3 +81,8 @@ def course_update(request, pk):
     
     context = {'form':form, 'title': 'Редактирование курса'}
     return render(request,'pages/course_form.html', context)
+
+class RegisterView(CreateView):
+    template_name = 'registration/register.html'
+    form_class = CustomRegisterForm
+    success_url = reverse_lazy('login')
