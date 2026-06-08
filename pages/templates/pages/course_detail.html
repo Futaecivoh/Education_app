@@ -11,6 +11,21 @@
                     <h1 class="display-5 fw-bold text-primary mb-3">{{ course.title }}</h1>
                     <p class="text-muted mb-4">Опубликовано: {{ course.created_at|date:"d.m.Y" }}</p>
                     
+                    <h1 class="display-5 fw-bold text-primary mb-3">{{ course.title }}</h1>
+                        <p class="text-muted mb-4">Опубликовано: {{ course.created_at|date:"d.m.Y" }}</p>
+
+                        <div class="mb-4">
+                            {% for tag in course.tags.all %}
+                                <a href="{% url 'courses_by_tag' tag.id %}" class="badge bg-info text-decoration-none fs-6 me-1">{{ tag.name }}</a>
+                            {% empty %}
+                                <span class="badge bg-secondary">Нет тегов</span>
+                            {% endfor %}
+                        </div>
+
+                        {% if course.image %}
+                            <img src="{{ course.image.url }}" class="img-fluid rounded mb-4" alt="Изображение курса">
+                        {% endif %}
+                    
                     <h4 class="fw-bold mb-3">О программе:</h4>
                     <p class="fs-5 mb-5">{{ course.description|linebreaks }}</p>
                     

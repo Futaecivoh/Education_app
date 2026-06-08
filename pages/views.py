@@ -5,7 +5,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from .models import Course, Tag
 
+def courses_by_tag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    courses = tag.courses.all()
+    
+    context = {
+        'title': f'Курсы по тегу: {tag.name}',
+        'courses': courses,
+    }
+    return render(request, 'pages/materials.html', context)
 
 def index(request):
     context = {
@@ -58,7 +68,7 @@ def contact_view(request):
 @login_required
 def course_create(request):
     if request.method == 'POST':
-        form = CourseForm(request.POST)
+        form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             course = form.save(commit=False)
             course.author = request.user
@@ -72,7 +82,7 @@ def course_create(request):
 @login_required
 def course_update(request, pk):
     course = get_object_or_404(Course, pk=pk)
-    form = CourseForm(request.POST, instance=course)
+    form = CourseForm(request.POST, request.FILES, instance=course)
     if form.is_valid():
         form.save()
         return redirect('course_detail', pk=course.pk)

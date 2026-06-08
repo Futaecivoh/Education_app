@@ -22,12 +22,14 @@ class CourseForm(forms.ModelForm):
     
     class Meta:
         model = Course
-        fields = ["title","description", "price"]
+        fields = ["title","description", "price", 'image', 'tags']
         
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'price':forms.NumberInput(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'tags': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
         
 class CustomRegisterForm(UserCreationForm):
