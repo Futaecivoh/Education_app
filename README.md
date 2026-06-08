@@ -24,7 +24,7 @@
    git clone <URL>
    cd education_app
 
-2. **Клонируйте репозиторий:**
+2. **Пример содержимого .env:**
    - DB_NAME=sakuranbo_db
    - DB_USER=postgres
    - DB_PASSWORD=password
@@ -32,6 +32,7 @@
    - DB_PORT=5432
    - SECRET_KEY=your_secret_key
    - DEBUG=True
+   
 3. **Клонируйте репозиторий:**
     ```docker-compose up --build```
 
